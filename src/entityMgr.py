@@ -10,7 +10,7 @@ class EntityMgr:
         self.ents = {}
         self.nEnts = 0
         import ent
-        self.entTypes = [ent.PlayerShip]
+        self.entTypes = [ent.PlayerShip, ent.EnemyShip,]
         
         self.playerObject = None
 

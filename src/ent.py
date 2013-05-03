@@ -8,6 +8,7 @@ from vector        import Vector3
 from physics       import Physics
 from render        import Renderer
 from unitAI        import UnitAI
+from collision     import Collision
 
 #-----------------------------------------------------------------------------------------
 class Entity:
@@ -15,7 +16,7 @@ class Entity:
     orientation = Quaternion(0, 0, 0, 1);
     vel  = Vector3(0, 0, 0)
 
-    aspectTypes = [Physics, Renderer, UnitAI]
+    aspectTypes = [Physics, Collision, Renderer, UnitAI]
     
     def __init__(self, engine, id, mesh, pos = Vector3(0,0,0), orientation = Quaternion(0,0,0,1), vel = Vector3(0,0,0)):
         self.engine = engine
@@ -47,7 +48,7 @@ class Entity:
 #-----------------------------------------------------------------------------------------
 class GenericShip(Entity):
     def __init__(self, engine, id, mesh, pos = Vector3(0,0,0), orientation = Quaternion(0,0,0,1), vel = Vector3(0,0,0)):
-        Entity.__init__(self, engine, id, '', pos = Vector3(0,0,0), orientation = Quaternion(0,0,0,1), vel = Vector3(0,0,0))
+        Entity.__init__(self, engine, id, '', pos, orientation, vel)
         self.mesh = ''
         self.uiname = 'generic' + str(id)
 
@@ -72,6 +73,7 @@ class GenericShip(Entity):
         self.health = 100.0
         self.energy = 100.0
         self.fireRate = 10.0
+        self.collideRadius = 500
 #-----------------------------------------------------------------------------------------
 class PlayerShip(GenericShip):
     def __init__(self, engine, id, pos = Vector3(0,0,0), orientation = Quaternion(0,0,0,1), vel = Vector3(0,0,0)):
@@ -100,3 +102,32 @@ class PlayerShip(GenericShip):
         self.health = 100.0
         self.energy = 100.0
         self.fireRate = 10.0
+#-----------------------------------------------------------------------------------------
+class EnemyShip(GenericShip):
+    def __init__(self, engine, id, pos = Vector3(0,0,0), orientation = Quaternion(0,0,0,1), vel = Vector3(0,0,0)):
+        GenericShip.__init__(self, engine, id, 'fighter.mesh', pos, orientation, vel)
+        self.mesh = 'fighter.mesh'
+        self.uiname = 'enemy' + str(id)
+
+        self.orientation = Quaternion()
+        self.orientation.FromAngleAxis(ogre.Degree(0), Vector3(0, 0, 1))
+
+        # Movement
+        self.acceleration = 20.0
+        self.turningRate  = 20.0
+        self.maxSpeed = 200.0
+        self.desiredSpeed = 0.0
+        self.yawRate = 0.0
+        self.pitchRate = 0.0
+        self.speed = 0.0
+        
+        # Control
+        self.isPlayerControlled = False
+        self.command = None
+        
+        # Other ship related data
+        self.isTargeted = False
+        self.health = 100.0
+        self.energy = 100.0
+        self.fireRate = 10.0        
+
