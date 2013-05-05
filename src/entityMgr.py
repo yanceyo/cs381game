@@ -1,5 +1,7 @@
 from vector import Vector3
+import ogre.renderer.OGRE as ogre
 
+Quaternion = ogre.Quaternion
 
 class EntityMgr:
     def __init__(self, engine):
@@ -14,8 +16,8 @@ class EntityMgr:
         
         self.playerObject = None
 
-    def createEnt(self, entType, pos = Vector3(0,0,0)):
-        ent = entType(self.engine, self.nEnts, pos = pos)
+    def createEnt(self, entType, pos = Vector3(0,0,0), orientation = Quaternion(0,0,0,1)):
+        ent = entType(self.engine, self.nEnts, pos = pos, orientation = orientation)
         print "EntMgr created: ", ent.uiname, ent.eid, self.nEnts
         ent.init()
         self.ents[self.nEnts] = ent;

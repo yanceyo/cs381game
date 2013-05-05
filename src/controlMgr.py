@@ -9,6 +9,7 @@ import ogre.io.OIS as OIS
 
 class ControlMgr:
     toggleMax = 0.1
+    toggleFireMax = 0.5
     def __init__(self, engine):
         self.engine = engine
         print "Control Manager Constructed "
@@ -18,6 +19,7 @@ class ControlMgr:
         self.mouse = self.engine.inputMgr.mouse
         self.ms = self.mouse.getMouseState()
         self.toggle = self.toggleMax
+        self.toggleFire = self.toggleFireMax
         
         self.screenWidth = self.engine.gfxMgr.viewPort.getActualWidth()
         self.screenHeight = self.engine.gfxMgr.viewPort.getActualHeight()
@@ -43,6 +45,9 @@ class ControlMgr:
         #----------make selected ent respond to keyboard controls-----------------------------------
         if self.toggle >= 0:
             self.toggle = self.toggle - dtime
+            
+        if self.toggleFire >= 0:
+            self.toggleFire = self.toggleFire - dtime
 
         if  self.toggle < 0:
             self.keyboard.capture()
@@ -71,4 +76,9 @@ class ControlMgr:
                     temp = ogre.Quaternion()
                     temp.FromAngleAxis(ogre.Degree(0.5), ogre.Vector3(1, 0, 0))
                     self.playerObject.orientation *= temp
+                    
+                # Fire button
+                if  self.keyboard.isKeyDown(OIS.KC_SPACE) and self.toggleFire < 0:
+                    self.toggleFire = self.toggleFireMax
+                    self.playerObject.fireMissile()
 
