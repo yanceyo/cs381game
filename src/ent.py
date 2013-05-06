@@ -104,7 +104,8 @@ class PlayerShip(GenericShip):
         self.fireRate = 10.0
         
     def fireMissile(self):
-        self.engine.entityMgr.createEnt(Missile, pos = Vector3(self.pos.x+20, 0, self.pos.z+50), orientation = self.orientation)
+        print str(self.pos.x)
+        self.engine.entityMgr.createEnt(Missile, pos = Vector3(self.pos.x+50, self.pos.y, self.pos.z), orientation = self.orientation)
 #-----------------------------------------------------------------------------------------
 class EnemyShip(GenericShip):
     def __init__(self, engine, id, pos = Vector3(0,0,0), orientation = Quaternion(0,0,0,1), vel = Vector3(0,0,0)):
@@ -146,13 +147,13 @@ class Missile(GenericShip):
         # self.orientation.FromAngleAxis(ogre.Degree(0), Vector3(0, 0, 1))
 
         # Movement
-        self.acceleration = 20.0
-        self.turningRate  = 20.0
+        self.acceleration = 80.0
+        self.turningRate  = 50.0
         self.maxSpeed = 200.0
-        self.desiredSpeed = 0.0
+        self.desiredSpeed = self.maxSpeed
         self.yawRate = 0.0
         self.pitchRate = 0.0
-        self.speed = 0.0
+        self.speed = 50.0
         
         # Control
         self.isPlayerControlled = False
